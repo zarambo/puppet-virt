@@ -3,7 +3,7 @@ Puppet::Type.type(:virt).provide :lxc do
 
     commands :lxccreate   => 'lxc-create',
              :lxcdestroy  => 'lxc-destroy',
-             :lxcclone    => 'lxc-clone',
+             :lxcclone    => 'lxc-copy',
              :lxcinfo     => 'lxc-info',
              :lxcstart    => 'lxc-start',
              :lxcstop     => 'lxc-stop',
@@ -46,8 +46,8 @@ Puppet::Type.type(:virt).provide :lxc do
     end
 
     def clone
-      args = ['-o', @resource[:clone]]
-      args.push('-n', @resource[:name])
+      args = ['-n', @resource[:clone]]
+      args.push('-N', @resource[:name])
 
       if @resource[:backingstore].to_s == 'lvm'
         if !@resource[:vgname].nil?
@@ -58,7 +58,7 @@ Puppet::Type.type(:virt).provide :lxc do
         end
       end
       if @resource[:snapshot]
-         args.push('-s')
+         #args.push('-s')
       end
       lxcclone(*args)
     end
